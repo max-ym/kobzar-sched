@@ -5,3 +5,6 @@ authors = ["Maxym Naumchyk <max.naumch@gmail.com>"]
 edition = "2018"
 
 [dependencies]
+
+[dependencies.ccs]
+path = "../ccs"
