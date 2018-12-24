@@ -44,8 +44,6 @@ pub struct Sched<C: Cpu> {
 
     threads: Vec<ThreadSched>,
 
-    active_thread_ids: Vec<usize>,
-
     cur_thread_id: usize,
 
     /// CCS network controller.
