@@ -97,6 +97,7 @@ impl<C> Sched<C>
         let mut cur_core = 0;
         while remain > 0 {
             // Get next thread id.
+            let prev_id = self.cur_thread_id;
             let next_id = self.cur_thread_id + 1;
             let next_id = if next_id > threads_len {
                 0
@@ -107,6 +108,10 @@ impl<C> Sched<C>
 
             // Attach thread to core.
             self.cpu.attach_thread(cur_core, &self.threads[next_id]);
+
+            // Update state of the threads in the network.
+            self.network.active_thread(self.threads[next_id].key());
+            self.network.sleep_thread(self.threads[prev_id].key());
 
             cur_core += 1;
             remain -= 1;
@@ -142,10 +147,14 @@ impl<C> Default for Sched<C>
 
 impl ThreadSched {
 
-    fn new(key: ThreadKey) -> Self {
+    pub fn new(key: ThreadKey) -> Self {
         ThreadSched {
             key,
         }
+    }
+
+    pub fn key(&self) -> &ThreadKey {
+        &self.key
     }
 }
 
