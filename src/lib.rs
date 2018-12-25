@@ -192,7 +192,10 @@ impl<C> Core<C> where C: Cpu {
                 add_time
             };
 
-            (schedr.time + add_time) as _
+            let time = (schedr.time + add_time) as _;
+            drop(schedr);
+            self.schedw().threads[next_pos].add_time -= time as u32;
+            time
         };
         self.schedw().cpu.add_timer(time, TimerType::Execution);
 
